@@ -16,7 +16,7 @@ defmodule Mix.Tasks.Runner do
     input =
       file
       |> IO.stream(:line)
-      |> Enum.to_list()
+      |> Enum.map(&String.trim/1)
 
     File.close(file)
 
