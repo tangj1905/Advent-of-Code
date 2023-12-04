@@ -5,7 +5,7 @@ defmodule AdventOfCode2023.Day03 do
 
   @spec part1([String.t]) :: integer
   def part1(lines) do
-    for nums <- lines |> parts_by_symbol |> Map.values(),
+    for nums <- lines |> parts_by_symbol() |> Map.values(),
         reduce: 0 do
       sum -> sum + Enum.sum(nums)
     end
