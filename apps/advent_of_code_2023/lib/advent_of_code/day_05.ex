@@ -1,6 +1,6 @@
 defmodule AdventOfCode2023.Day05 do
   @moduledoc """
-  Day 4 of Advent of Code 2023.
+  Day 5 of Advent of Code 2023.
   """
 
   @spec part1([String.t]) :: integer
