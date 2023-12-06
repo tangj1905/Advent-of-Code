@@ -7,44 +7,43 @@ defmodule AdventOfCode2023.Day05 do
   def part1(lines) do
     ["seeds: " <> seeds | maps] = lines
 
-    # This will turn each map into a function,
-    # where we will compose them together:
+    # This will turn each map into a function that
+    # maps a range into a list of subsequent ranges.
     mapping_fn =
       maps
       |> parse_mappings()
-      |> Stream.map(&map_to_fn/1)
-      |> Enum.reduce(fn g, f -> &g.(f.(&1)) end)
+      |> Stream.map(&map_to_range_fn/1)
+      |> Enum.reduce(&[&1], fn g, f ->
+        &(&1 |> f.() |> Enum.flat_map(g))
+      end)
 
     seeds
     |> String.split(" ", trim: true)
     |> Stream.map(&String.to_integer/1)
-    |> Stream.map(mapping_fn)
+    |> Stream.flat_map(fn i -> mapping_fn.(i..i) end)
+    |> Stream.map(&(&1.first))
     |> Enum.min()
   end
 
   @spec part2([String.t]) :: integer
-  # Brute force, but in parallel!
+  # Applied range optimization - this takes < 1s to execute.
   def part2(lines) do
     ["seeds: " <> seeds | maps] = lines
 
     mapping_fn =
       maps
       |> parse_mappings()
-      |> Stream.map(&map_to_fn/1)
-      |> Enum.reduce(fn g, f -> &g.(f.(&1)) end)
+      |> Stream.map(&map_to_range_fn/1)
+      |> Enum.reduce(&[&1], fn g, f ->
+        &(&1 |> f.() |> Enum.flat_map(g))
+      end)
 
-    seed_ranges =
-      seeds
-      |> String.split(" ", trim: true)
-      |> Enum.map(&String.to_integer/1)
-      |> Enum.chunk_every(2)
-      |> Enum.map(fn [from, len] -> from..(from + len - 1) end)
-
-    seed_ranges
-    |> Stream.map(&Task.async(fn -> Enum.reduce(&1, :inf,
-      fn i, acc -> min(mapping_fn.(i), acc) end)
-    end))
-    |> Stream.map(&Task.await(&1, :infinity))
+    seeds
+    |> String.split(" ", trim: true)
+    |> Stream.map(&String.to_integer/1)
+    |> Stream.chunk_every(2)
+    |> Stream.flat_map(fn [from, len] -> mapping_fn.(from..(from + len - 1)) end)
+    |> Stream.map(&(&1.first))
     |> Enum.min()
   end
 
@@ -67,12 +66,20 @@ defmodule AdventOfCode2023.Day05 do
     end
   end
 
-  @spec map_to_fn([[integer]]) :: (integer -> integer)
-  defp map_to_fn(mapping) do
-    Enum.reduce(mapping, &Function.identity/1, fn [dest, src, len], f ->
-      fn
-        n when src <= n and n < src + len -> dest + n - src
-        n -> f.(n)
+  @spec map_to_range_fn([[integer]]) :: (Range.t -> [Range.t])
+  defp map_to_range_fn(mapping) do
+    Enum.reduce(mapping, &[&1], fn [dest, src, len], f ->
+      fn l..r ->
+        l_range = l..min(r, src - 1)//1
+        m_range = max(l, src)..min(r, src + len - 1)//1 |> Range.shift(dest - src)
+        r_range = max(l, src + len)..r//1
+
+        still_requires_mapping =
+          [l_range, r_range]
+          |> Enum.reject(&Enum.empty?/1)
+          |> Enum.flat_map(f)
+
+        Enum.reject([m_range | still_requires_mapping], &Enum.empty?/1)
       end
     end)
   end
