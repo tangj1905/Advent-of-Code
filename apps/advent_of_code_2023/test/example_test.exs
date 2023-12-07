@@ -6,25 +6,31 @@ defmodule AdventTester do
   defp sigil_l(str, []), do:
     str |> String.split("\r\n") |> Enum.map(&String.trim/1)
 
-  import AdventOfCode2023.Day06
+  import AdventOfCode2023.Day07
 
   # @tag :skip
   test "part1" do
     input = ~l"""
-      Time:      7  15   30
-      Distance:  9  40  200
+      32T3K 765
+      T55J5 684
+      KK677 28
+      KTJJT 220
+      QQQJA 483
       """
 
-    assert part1(input) == 288
+    assert part1(input) == 6440
   end
 
   # @tag :skip
   test "part2" do
     input = ~l"""
-      Time:      7  15   30
-      Distance:  9  40  200
+      32T3K 765
+      T55J5 684
+      KK677 28
+      KTJJT 220
+      QQQJA 483
       """
 
-    assert part2(input) == 71503
+    assert part2(input) == 5905
   end
 end
