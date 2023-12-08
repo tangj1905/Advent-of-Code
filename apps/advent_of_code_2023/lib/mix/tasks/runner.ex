@@ -8,17 +8,13 @@ defmodule Mix.Tasks.Runner do
   def run([day, part | _]) do
     func = fetch_function(day, part)
 
-    {:ok, file} =
+    input =
       File.cwd!()
       |> Path.join("inputs/input#{day}.txt")
-      |> File.open()
-
-    input =
-      file
-      |> IO.stream(:line)
+      |> File.read!()
+      |> String.trim_trailing()
+      |> String.split("\r\n")
       |> Enum.map(&String.trim/1)
-
-    File.close(file)
 
     output =
       input
