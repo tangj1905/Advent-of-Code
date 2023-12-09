@@ -10,36 +10,27 @@ defmodule AdventTester do
     |> Enum.map(&String.trim/1)
   end
 
-  import AdventOfCode2023.Day08
+  import AdventOfCode2023.Day09
 
   # @tag :skip
   test "part1" do
     input = ~l"""
-      LLR
-
-      AAA = (BBB, BBB)
-      BBB = (AAA, ZZZ)
-      ZZZ = (ZZZ, ZZZ)
+      0 3 6 9 12 15
+      1 3 6 10 15 21
+      10 13 16 21 30 45
       """
 
-    assert part1(input) == 6
+    assert part1(input) == 114
   end
 
   # @tag :skip
   test "part2" do
     input = ~l"""
-      LR
-
-      11A = (11B, XXX)
-      11B = (XXX, 11Z)
-      11Z = (11B, XXX)
-      22A = (22B, XXX)
-      22B = (22C, 22C)
-      22C = (22Z, 22Z)
-      22Z = (22B, 22B)
-      XXX = (XXX, XXX)
+      0 3 6 9 12 15
+      1 3 6 10 15 21
+      10 13 16 21 30 45
       """
 
-    assert part2(input) == 6
+    assert part2(input) == 2
   end
 end
