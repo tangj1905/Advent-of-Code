@@ -14,14 +14,13 @@ defmodule AdventOfCode2023.Day10 do
 
   @spec part2([String.t]) :: integer
   def part2(lines) do
-    loop_coord_set =
-      lines
-      |> to_coord_map()
-      |> loop_coords()
-
     height = length(lines)
     width = lines |> hd() |> byte_size()
-    count_enclosed(loop_coord_set, height, width)
+    
+    lines
+    |> to_coord_map()
+    |> loop_coords()
+    |> count_enclosed(height, width)
   end
 
   # ===== Helper functions =====
@@ -45,17 +44,12 @@ defmodule AdventOfCode2023.Day10 do
     end
   end
 
-  @spec neighbors(coord) :: [coord]
-  defp neighbors({i, j}), do:
-    [{i + 1, j}, {i - 1, j}, {i, j + 1}, {i, j - 1}]
-
   @type winding_map :: %{coord => vert_diff :: integer}
   @spec loop_coords(coord_map) :: winding_map
   def loop_coords(coord_map) do
-    start = coord_map.start
+    start = {i, j} = coord_map.start
     [_end_pos = {i1, _j1}, init_pos = {i2, _j2}] =
-      start
-      |> neighbors()
+      [{i + 1, j}, {i - 1, j}, {i, j + 1}, {i, j - 1}]
       |> Enum.filter(fn next -> start in Map.get(coord_map, next, []) end)
 
     walk_loop(coord_map, init_pos, start) |> Map.put(start, i2 - i1)
