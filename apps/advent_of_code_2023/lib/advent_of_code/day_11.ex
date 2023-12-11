@@ -21,7 +21,7 @@ defmodule AdventOfCode2023.Day11 do
 
   # ===== Helper functions =====
   @type galaxy_map :: [[?. | ?#]]
-  @type coord :: {x :: integer, y :: integer}
+  @type coord :: {i :: integer, j :: integer}
   @spec galaxy_positions(galaxy_map, integer) :: [coord]
   defp galaxy_positions(map, expansion_factor) do
     expand_rows = empty_rows(map)
@@ -44,7 +44,7 @@ defmodule AdventOfCode2023.Day11 do
   end
 
   @spec dist(coord, coord) :: integer
-  # Chebyshev distance:
+  # Manhattan distance:
   defp dist({i1, j1}, {i2, j2}), do:
     abs(i2 - i1) + abs(j2 - j1)
 
