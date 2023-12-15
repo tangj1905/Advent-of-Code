@@ -16,12 +16,10 @@ defmodule Mix.Tasks.Runner do
       |> String.split("\r\n")
       |> Enum.map(&String.trim/1)
 
-    output =
-      input
-      |> func.()
-      |> to_string()
+    {micros, output} = :timer.tc(func, [input])
 
-    Mix.shell().info(output)
+    Mix.shell().info("Time: #{micros / 1000} ms")
+    Mix.shell().info("Output: #{output}")
   end
 
   def fetch_function(day, part) do
