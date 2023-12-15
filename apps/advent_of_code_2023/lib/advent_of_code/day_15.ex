@@ -36,8 +36,7 @@ defmodule AdventOfCode2023.Day15 do
   # with a list of lenses, represented as {label, focal_length}.
 
   # Some kind of order-preserving map would be more ideal, but
-  # this should be ok too. Erlang provides some conveniences
-  # here in the :lists module.
+  # this should be ok too.
   @type lens :: {label :: String.t, focal_length :: integer}
   @type box_map :: %{box :: integer => [lens]}
 
@@ -48,10 +47,10 @@ defmodule AdventOfCode2023.Day15 do
 
     case lens_op do
       "-" ->
-        Map.update(boxes, box_id, [], &:lists.keydelete(label, 1, &1))
+        Map.update(boxes, box_id, [], &List.keydelete(&1, label, 0))
       "=" <> focal_len ->
         lens = {label, String.to_integer(focal_len)}
-        Map.update(boxes, box_id, [lens], &:lists.keystore(label, 1, &1, lens))
+        Map.update(boxes, box_id, [lens], &List.keystore(&1, label, 0, lens))
     end
   end
 end
