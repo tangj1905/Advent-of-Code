@@ -3,27 +3,36 @@ defmodule AdventTester do
 
   # A convenience sigil to convert a multiline
   # heredoc to a list of lines:
-  defp sigil_l(str, []) do
+  defp sigil_L(str, []) do
     str
     |> String.trim_trailing()
     |> String.split("\r\n")
     |> Enum.map(&String.trim/1)
   end
 
-  import AdventOfCode2023.Day15
+  import AdventOfCode2023.Day16
 
   # @tag :skip
   test "part1" do
-    input = ~l"""
-      rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7
+    input = ~L"""
+      .|...\....
+      |.-.\.....
+      .....|-...
+      ........|.
+      ..........
+      .........\
+      ..../.\\..
+      .-.-/..|..
+      .|....-|.\
+      ..//.|....
       """
 
-    assert part1(input) == 1320
+    assert part1(input) == 46
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
-    input = ~l"""
+    input = ~L"""
       rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7
       """
 
