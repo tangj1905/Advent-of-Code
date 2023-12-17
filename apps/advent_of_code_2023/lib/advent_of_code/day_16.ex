@@ -21,7 +21,8 @@ defmodule AdventOfCode2023.Day16 do
     verti = Enum.flat_map(0..w - 1, fn j -> [{{0, j}, {1, 0}}, {{l - 1, j}, {-1, 0}}] end)
 
     (horiz ++ verti)
-    |> Stream.map(fn init -> count_tiles(grid, init) end)
+    |> Enum.map(&Task.async(fn -> count_tiles(grid, &1) end))
+    |> Task.await_many(:infinity)
     |> Enum.max()
   end
 

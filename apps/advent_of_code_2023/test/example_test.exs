@@ -30,12 +30,21 @@ defmodule AdventTester do
     assert part1(input) == 46
   end
 
-  @tag :skip
+  # @tag :skip
   test "part2" do
     input = ~L"""
-      rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7
+      .|...\....
+      |.-.\.....
+      .....|-...
+      ........|.
+      ..........
+      .........\
+      ..../.\\..
+      .-.-/..|..
+      .|....-|.\
+      ..//.|....
       """
 
-    assert part2(input) == 145
+    assert part2(input) == 51
   end
 end
