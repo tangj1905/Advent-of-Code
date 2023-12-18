@@ -45,8 +45,6 @@ defmodule AdventOfCode2023.Day17 do
 
   # Good 'ol Dijkstra's algorithm.
   # Our state is a record consisting of location & direction to face.
-  @type memo :: %{coord => total_loss :: integer}
-
   @spec dijkstra(grid, Heap.t({cost :: integer, state}), MapSet.t(state), Range.t) :: integer
   defp dijkstra(grid, state_queue, visited, move_range) do
     {{cost, state = state(location: loc)}, state_queue} = Heap.split(state_queue)
