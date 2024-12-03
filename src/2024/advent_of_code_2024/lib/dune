@@ -1,7 +1,11 @@
 (library
  (name advent_of_code_2024)
+ (inline_tests)
+ (preprocess
+  (pps ppx_inline_test ppx_assert))
  (libraries re core))
 
+; Input files are stored in the input root:
 (install
  (files
   (glob_files (../inputs/*.txt with_prefix .)))
