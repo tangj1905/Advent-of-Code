@@ -5,14 +5,18 @@ let rgx =
   compile (seq [group(rep1 digit); rep1 space; group(rep1 digit)]);;
 
 let parse_line (line: string) =
+  (* Splits the given line into a pair of numbers: *)
   let grps = Re.exec_opt rgx line in
-  Option.map (fun g -> (int_of_string(Re.Group.get g 1), int_of_string(Re.Group.get g 2))) grps;;
+  Option.map
+    (fun g -> (int_of_string(Re.Group.get g 1), int_of_string(Re.Group.get g 2)))
+    grps;;
 
 let parse_inputs (input: string list) =
   input |> List.filter_map parse_line |> List.split 
 
 (* DRIVER CODE *)
 let part1 (lines: string list) =
+  (* Sort each input list & add the absolute differences: *)
   let (a, b) = parse_inputs lines in
   let std_a = List.sort compare a in
   let std_b = List.sort compare b in
@@ -20,6 +24,7 @@ let part1 (lines: string list) =
     |> List.fold_left (+) 0;;
 
 let part2 (lines: string list) =
+  (* Get a frequency count for elements in the second list: *)
   let (a, b) = parse_inputs lines in
   let freq_b = Core.Hashtbl.group (module Core.Int)
     ~get_key: Fun.id
