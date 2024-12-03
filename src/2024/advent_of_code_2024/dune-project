@@ -1,0 +1,18 @@
+(lang dune 3.17)
+
+(name advent_of_code_2024)
+
+(generate_opam_files true)
+
+(source
+ (github tangj1905/advent_of_code))
+
+(authors "tangj1905 <tang.j1905@gmail.com>")
+
+(package
+ (name advent_of_code_2024)
+ (synopsis "AoC2024")
+ (description "Submissions for Advent of Code 2024")
+ (depends ocaml core))
+
+; See the complete stanza docs at https://dune.readthedocs.io/en/stable/reference/dune-project/index.html

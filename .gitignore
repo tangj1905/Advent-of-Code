@@ -1,2 +1,4 @@
 # Ignore language servers:
 .elixir_ls/
+
+.vscode/
