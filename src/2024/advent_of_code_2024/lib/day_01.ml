@@ -1,19 +1,10 @@
 open Core
 
 (* HELPER FUNCTIONS *)
-let example = {|
-3   4
-4   3
-2   5
-1   3
-3   9
-3   3
-|} |> String.split_lines
-
 let rgx =
   (* Equivalent to /(\d+)\w+(\d+)/ in regex terms... *)
   let open Re in
-  compile (seq [group(rep1 digit); rep1 space; group(rep1 digit)]);;
+  compile (seq [group(rep1 digit); rep1 space; group(rep1 digit)])
 
 let parse_inputs lines =
   (* Parses the input into a pair of columns: *)
@@ -35,10 +26,7 @@ module Part_1 = struct
     
     List.map2_exn std_a std_b ~f: (fun x y -> abs (x - y))
      |> List.fold_left ~init: 0 ~f: (+)
-     |> string_of_int;;
-
-  let%test_unit "example" =
-    [%test_eq: string] (solve example) "11"
+     |> string_of_int
 end
 
 
@@ -59,8 +47,22 @@ module Part_2 = struct
       
     List.map ~f: similarity a
       |> List.fold_left ~init: 0 ~f: (+)
-      |> string_of_int;;
-
-  let%test_unit "example" =
-    [%test_eq: string] (solve example) "31"
+      |> string_of_int
 end
+
+
+(* TESTING *)
+let example = String.split_lines(
+{|3   4
+4   3
+2   5
+1   3
+3   9
+3   3
+|})
+
+let%test_unit "part_1_example" =
+  [%test_eq: string] (Part_1.solve example) "11"
+
+let%test_unit "part_2_example" =
+  [%test_eq: string] (Part_2.solve example) "31"
