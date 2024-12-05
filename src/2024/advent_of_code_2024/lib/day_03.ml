@@ -17,7 +17,7 @@ module Part_1 = struct
   let solve (lines: string list) =
     lines
     |> List.bind ~f: (Re.all rgx)
-    |> List.fold ~init: 0 ~f: (fun sum g -> sum + eval_mul g)
+    |> List.sum (module Int) ~f: eval_mul
     |> string_of_int
 end
 

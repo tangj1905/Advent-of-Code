@@ -25,8 +25,8 @@ module Part_1 = struct
     let std_b = List.sort ~compare: compare b in
     
     List.map2_exn std_a std_b ~f: (fun x y -> abs (x - y))
-     |> List.fold_left ~init: 0 ~f: (+)
-     |> string_of_int
+      |> List.sum (module Int) ~f: Fun.id
+      |> string_of_int
 end
 
 
@@ -45,7 +45,7 @@ module Part_2 = struct
       | None -> 0 in
       
     List.map ~f: similarity a
-      |> List.fold_left ~init: 0 ~f: (+)
+      |> List.sum (module Int) ~f: Fun.id
       |> string_of_int
 end
 
