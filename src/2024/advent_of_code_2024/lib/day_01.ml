@@ -33,7 +33,6 @@ end
 module Part_2 = struct
   (* Part 2: Get a frequency count for elements in the second list *)
   let solve (lines: string list) =
-    (* Get a frequency count for elements in the second list: *)
     let (a, b) = parse_inputs lines in
     let freq_b = Hashtbl.group (module Int)
       ~get_key: Fun.id
