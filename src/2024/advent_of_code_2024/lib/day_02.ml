@@ -27,7 +27,9 @@ end
 module Part_2 = struct
   (* Part 2: Same thing, but try removing an unsafe element *)
   let drop_i xs i =
-    Array.append (Base.Array.subo ~pos: 0 ~len: i xs) (Base.Array.subo ~pos: (i + 1) xs)
+    Array.append
+      (Base.Array.subo ~pos: 0 ~len: i xs)
+      (Base.Array.subo ~pos: (i + 1) xs)
 
   let is_very_safe xs =
     xs
