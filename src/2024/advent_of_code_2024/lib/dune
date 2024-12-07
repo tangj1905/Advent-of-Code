@@ -6,7 +6,9 @@
  (libraries re core))
 
 ; Input files are stored in the input root:
+
 (install
  (files
-  (glob_files (../inputs/input*.txt with_prefix .)))
+  (glob_files
+   (../inputs/input*.txt with_prefix .)))
  (section share))
