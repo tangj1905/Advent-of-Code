@@ -44,7 +44,7 @@ module Part_2 = struct
       match Hashtbl.find freq_b x with Some freq -> freq * x | None -> 0
     in
 
-    List.map ~f:similarity a |> List.sum (module Int) ~f:Fun.id |> string_of_int
+    List.sum (module Int) a ~f:similarity |> string_of_int
 end
 
 (* TESTING *)
