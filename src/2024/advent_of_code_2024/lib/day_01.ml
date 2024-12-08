@@ -24,7 +24,6 @@ module Part_1 = struct
     let a, b = parse_inputs lines in
     let std_a = List.sort ~compare a in
     let std_b = List.sort ~compare b in
-
     List.map2_exn std_a std_b ~f:(fun x y -> abs (x - y))
     |> List.sum (module Int) ~f:Fun.id
     |> string_of_int
@@ -39,11 +38,9 @@ module Part_2 = struct
         (module Int)
         ~get_key:Fun.id ~get_data:(Fun.const 1) ~combine:( + ) b
     in
-
     let similarity x =
       match Hashtbl.find freq_b x with Some freq -> freq * x | None -> 0
     in
-
     List.sum (module Int) a ~f:similarity |> string_of_int
 end
 

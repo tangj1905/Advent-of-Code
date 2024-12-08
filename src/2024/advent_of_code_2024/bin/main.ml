@@ -1,7 +1,8 @@
 open Core
 
 (* DRIVER CODE *)
-let argv = Sys.get_argv()
+let argv = Sys.get_argv ()
+
 module type Solver = sig
   val solve : string list -> string
 end
@@ -18,6 +19,8 @@ module S =
        | [| _; "04"; "2" |] -> (module Advent_of_code_2024.Day_04.Part_2)
        | [| _; "05"; "1" |] -> (module Advent_of_code_2024.Day_05.Part_1)
        | [| _; "05"; "2" |] -> (module Advent_of_code_2024.Day_05.Part_2)
+       | [| _; "06"; "1" |] -> (module Advent_of_code_2024.Day_06.Part_1)
+       | [| _; "06"; "2" |] -> (module Advent_of_code_2024.Day_06.Part_2)
        | _ -> invalid_arg "Args: <day> <part>"
       : Solver)
 
@@ -29,8 +32,8 @@ let input_path = Filename.dirname argv.(0) ^ input_file
 let () =
   let open Int63 in
   let input = In_channel.read_lines input_path in
-  let t0 = Time_now.nanosecond_counter_for_timing() in
+  let t0 = Time_now.nanosecond_counter_for_timing () in
   let solution = S.solve input in
-  let t1 = Time_now.nanosecond_counter_for_timing() in
+  let t1 = Time_now.nanosecond_counter_for_timing () in
   let micros = (t1 - t0) / of_int 1000 in
   Printf.printf "Solution: %s\nFinished in %s us\n" solution (to_string micros)
