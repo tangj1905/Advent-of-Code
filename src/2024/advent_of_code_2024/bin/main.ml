@@ -23,6 +23,8 @@ module S =
        | [| _; "06"; "2" |] -> (module Advent_of_code_2024.Day_06.Part_2)
        | [| _; "07"; "1" |] -> (module Advent_of_code_2024.Day_07.Part_1)
        | [| _; "07"; "2" |] -> (module Advent_of_code_2024.Day_07.Part_2)
+       | [| _; "08"; "1" |] -> (module Advent_of_code_2024.Day_08.Part_1)
+       | [| _; "08"; "2" |] -> (module Advent_of_code_2024.Day_08.Part_2)
        | _ -> invalid_arg "Args: <day> <part>"
       : Solver)
 
