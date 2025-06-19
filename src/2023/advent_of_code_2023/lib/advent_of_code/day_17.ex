@@ -63,7 +63,7 @@ defmodule AdventOfCode2023.Day17 do
   end
 
   @spec next_moves(state, grid, Range.t()) :: [{cost :: integer, state}]
-  defp next_moves(state(location: {i, j}, dir: {di, dj}), grid, low..high) do
+  defp next_moves(state(location: {i, j}, dir: {di, dj}), grid, low..high//_) do
     candidates =
       1..high
       |> Stream.map(fn dist -> {i + dist * di, j + dist * dj} end)

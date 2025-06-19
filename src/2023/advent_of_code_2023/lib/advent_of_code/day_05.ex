@@ -69,7 +69,7 @@ defmodule AdventOfCode2023.Day05 do
   @spec map_to_range_fn([[integer]]) :: (Range.t() -> [Range.t()])
   defp map_to_range_fn(mapping) do
     Enum.reduce(mapping, &[&1], fn [dest, src, len], f ->
-      fn l..r ->
+      fn l..r//_ ->
         l_range = l..min(r, src - 1)//1
         m_range = max(l, src)..min(r, src + len - 1)//1 |> Range.shift(dest - src)
         r_range = max(l, src + len)..r//1

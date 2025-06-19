@@ -99,7 +99,7 @@ defmodule AdventOfCode2023.Day19 do
   @spec do_action(range :: PartRange.t(), action) ::
           {pass :: PartRange.t(), fail :: PartRange.t()}
   defp do_action(range, {op, attrib, threshold, _dest}) do
-    l..r = Map.get(range, attrib)
+    l..r//_ = Map.get(range, attrib)
 
     case op do
       :< ->
