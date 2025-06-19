@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day07 do
   Day 7 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     lines
     |> Stream.reject(&(&1 == ""))
@@ -13,7 +13,7 @@ defmodule AdventOfCode2023.Day07 do
     |> Enum.reduce(0, fn {hand, i}, acc -> i * hand.wager + acc end)
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     lines
     |> Stream.reject(&(&1 == ""))
@@ -29,16 +29,25 @@ defmodule Hand do
   A useful abstraction of a hand.
   """
   defstruct [:priority, :hand, wager: 0]
-  @type t :: %__MODULE__{
-    priority: 0..6, hand: [integer], wager: integer
-  }
 
-  @spec parse(String.t) :: __MODULE__.t
+  @type t :: %__MODULE__{
+          priority: 0..6,
+          hand: [integer],
+          wager: integer
+        }
+
+  @spec parse(String.t()) :: __MODULE__.t()
   def parse(<<a, b, c, d, e>> <> " " <> wager) do
     hand = Enum.map([a, b, c, d, e], &value/1)
-    sorted = Enum.sort_by(hand, fn a ->
-      {Enum.count(hand, fn b -> a == b end), a}
-    end, :desc)
+
+    sorted =
+      Enum.sort_by(
+        hand,
+        fn a ->
+          {Enum.count(hand, fn b -> a == b end), a}
+        end,
+        :desc
+      )
 
     init = %__MODULE__{hand: hand, wager: String.to_integer(wager)}
 
@@ -54,13 +63,13 @@ defmodule Hand do
     end
   end
 
-  @spec parse_jokers(String.t) :: __MODULE__.t
+  @spec parse_jokers(String.t()) :: __MODULE__.t()
   def parse_jokers(<<cards::binary-size(5)>> <> rest) do
     best_hand =
-      '23456789TQKA'
+      ~c"23456789TQKA"
       |> Stream.map(&String.replace(cards, "J", <<&1>>, global: true))
       |> Stream.map(&parse(&1 <> rest))
-      |> Enum.max_by(&(&1), __MODULE__)
+      |> Enum.max_by(& &1, __MODULE__)
 
     hand =
       cards
@@ -71,7 +80,7 @@ defmodule Hand do
     %{best_hand | hand: hand}
   end
 
-  @spec compare(__MODULE__.t, __MODULE__.t) :: :lt | :eq | :gt
+  @spec compare(__MODULE__.t(), __MODULE__.t()) :: :lt | :eq | :gt
   def compare(hand_a, hand_b) do
     %__MODULE__{priority: pa, hand: ha} = hand_a
     %__MODULE__{priority: pb, hand: hb} = hand_b

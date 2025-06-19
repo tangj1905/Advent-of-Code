@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day05 do
   Day 5 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     ["seeds: " <> seeds | maps] = lines
 
@@ -21,11 +21,11 @@ defmodule AdventOfCode2023.Day05 do
     |> String.split(" ", trim: true)
     |> Stream.map(&String.to_integer/1)
     |> Stream.flat_map(fn i -> mapping_fn.(i..i) end)
-    |> Stream.map(&(&1.first))
+    |> Stream.map(& &1.first)
     |> Enum.min()
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   # Applied range optimization - this takes < 1s to execute.
   def part2(lines) do
     ["seeds: " <> seeds | maps] = lines
@@ -43,12 +43,12 @@ defmodule AdventOfCode2023.Day05 do
     |> Stream.map(&String.to_integer/1)
     |> Stream.chunk_every(2)
     |> Stream.flat_map(fn [from, len] -> mapping_fn.(from..(from + len - 1)) end)
-    |> Stream.map(&(&1.first))
+    |> Stream.map(& &1.first)
     |> Enum.min()
   end
 
   # ===== Helper functions =====
-  @spec parse_mappings([String.t]) :: [[integer]]
+  @spec parse_mappings([String.t()]) :: [[integer]]
   defp parse_mappings(maps) do
     is_header_line =
       fn line -> String.ends_with?(line, "map:") end
@@ -66,7 +66,7 @@ defmodule AdventOfCode2023.Day05 do
     end
   end
 
-  @spec map_to_range_fn([[integer]]) :: (Range.t -> [Range.t])
+  @spec map_to_range_fn([[integer]]) :: (Range.t() -> [Range.t()])
   defp map_to_range_fn(mapping) do
     Enum.reduce(mapping, &[&1], fn [dest, src, len], f ->
       fn l..r ->

@@ -5,7 +5,7 @@ defmodule Mix.Tasks.Runner do
   Advent of Code runner
   Usage: mix runner <day> <part>
   """
-  @spec run(args :: [String.t]) :: any
+  @spec run(args :: [String.t()]) :: any
   def run([day, part | _]) do
     func = fetch_function(day, part)
 
@@ -23,7 +23,7 @@ defmodule Mix.Tasks.Runner do
     Mix.shell().info("Output: #{output}")
   end
 
-  @spec fetch_function(day :: String.t, part :: String.t) :: function
+  @spec fetch_function(day :: String.t(), part :: String.t()) :: function
   def fetch_function(day, part) do
     module = Module.concat([AdventOfCode2023, "Day#{day}"])
     func = String.to_atom("part#{part}")

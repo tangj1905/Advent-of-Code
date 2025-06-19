@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day04 do
   Day 4 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     Enum.reduce(lines, 0, fn line, total ->
       case overlap_count(line) do
@@ -13,7 +13,7 @@ defmodule AdventOfCode2023.Day04 do
     end)
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     # We propagate the difference in card count and accumulate
     # as we go; this ensures an O(n) solution.
@@ -31,13 +31,13 @@ defmodule AdventOfCode2023.Day04 do
   end
 
   # ===== Helper functions =====
-  @spec trim_card_header(String.t) :: String.t
+  @spec trim_card_header(String.t()) :: String.t()
   defp trim_card_header(line) do
     ": " <> card_info = :string.find(line, ":")
     card_info
   end
 
-  @spec overlap_count(String.t) :: integer
+  @spec overlap_count(String.t()) :: integer
   defp overlap_count(line) do
     [winners, have] =
       line

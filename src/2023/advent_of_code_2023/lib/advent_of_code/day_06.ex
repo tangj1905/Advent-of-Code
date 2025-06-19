@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day06 do
   Day 6 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1([times, distances | _]) do
     time_lst =
       times
@@ -20,7 +20,7 @@ defmodule AdventOfCode2023.Day06 do
     Enum.zip_with(time_lst, distance_lst, &solve/2) |> Enum.product()
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2([times, distances | _]) do
     time =
       times
@@ -46,11 +46,12 @@ defmodule AdventOfCode2023.Day06 do
 
     # This is a quadratic expression with a = -1, b = time, c = -distance.
     # x = (-b +/- sqrt(b ** 2 - 4 * a * c)) / 2 * a
-    max_time_held = (-1 * time - :math.sqrt(time * time - 4 * dist)) / -2 |> floor()
-    min_time_held = (-1 * time + :math.sqrt(time * time - 4 * dist)) / -2 |> ceil()
+    max_time_held = ((-1 * time - :math.sqrt(time * time - 4 * dist)) / -2) |> floor()
+    min_time_held = ((-1 * time + :math.sqrt(time * time - 4 * dist)) / -2) |> ceil()
 
     if (time - max_time_held) * max_time_held == dist do
-      max_time_held - min_time_held - 1   # Needs to be strictly greater...
+      # Needs to be strictly greater...
+      max_time_held - min_time_held - 1
     else
       max_time_held - min_time_held + 1
     end

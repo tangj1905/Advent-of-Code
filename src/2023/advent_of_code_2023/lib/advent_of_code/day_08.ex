@@ -3,13 +3,13 @@ defmodule AdventOfCode2023.Day08 do
   Day 8 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1([dirs, "" | maps]) do
     tbl = to_table(maps)
     run_len("AAA", dirs, tbl, &(&1 == "ZZZ"))
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2([dirs, "" | maps]) do
     tbl = to_table(maps)
 
@@ -24,19 +24,18 @@ defmodule AdventOfCode2023.Day08 do
   end
 
   # ===== Helper functions =====
-  @type dir_table :: %{String.t => {String.t, String.t}}
-  @spec to_table([String.t]) :: dir_table
+  @type dir_table :: %{String.t() => {String.t(), String.t()}}
+  @spec to_table([String.t()]) :: dir_table
   defp to_table(maps) do
     for line <- maps, into: %{} do
-      <<parent :: binary-size(3), " = (",
-        left   :: binary-size(3), ", ",
-        right  :: binary-size(3), ")">> = line
+      <<parent::binary-size(3), " = (", left::binary-size(3), ", ", right::binary-size(3), ")">> =
+        line
 
       {parent, {left, right}}
     end
   end
 
-  @spec run_len(String.t, String.t, dir_table, (String.t -> String.t)) :: integer
+  @spec run_len(String.t(), String.t(), dir_table, (String.t() -> String.t())) :: integer
   defp run_len(init, dirs, tbl, stopping_cond) do
     dirs
     |> String.to_charlist()

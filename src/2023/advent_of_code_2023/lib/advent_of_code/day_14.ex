@@ -3,21 +3,21 @@ defmodule AdventOfCode2023.Day14 do
   Day 14 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     lines
     |> Enum.map(&String.to_charlist/1)
-    |> Enum.zip_with(&(&1))
+    |> Enum.zip_with(& &1)
     |> tilt_north()
     |> north_load()
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     cycle_seq =
       lines
       |> Enum.map(&String.to_charlist/1)
-      |> Enum.zip_with(&(&1))
+      |> Enum.zip_with(& &1)
       |> Stream.iterate(&cycle/1)
 
     {cycle_start, cycle_len} =
@@ -25,7 +25,7 @@ defmodule AdventOfCode2023.Day14 do
       |> Stream.with_index()
       |> Enum.reduce_while(%{}, fn {plat, i}, seen ->
         case Map.get(seen, plat) do
-          nil   -> {:cont, Map.put(seen, plat, i)}
+          nil -> {:cont, Map.put(seen, plat, i)}
           start -> {:halt, {start, i - start}}
         end
       end)
@@ -52,6 +52,7 @@ defmodule AdventOfCode2023.Day14 do
   @spec north_load(platform) :: integer
   defp north_load(plat) do
     len = plat |> hd() |> length()
+
     for row <- plat, {?O, i} <- Enum.with_index(row), reduce: 0 do
       total -> total + len - i
     end
@@ -69,7 +70,7 @@ defmodule AdventOfCode2023.Day14 do
 
   @spec rotate_cw(platform) :: platform
   defp rotate_cw(plat) do
-    plat |> Enum.zip_with(&(&1)) |> Enum.reverse()
+    plat |> Enum.zip_with(& &1) |> Enum.reverse()
   end
 
   @spec cycle(platform) :: platform

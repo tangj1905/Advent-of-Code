@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day10 do
   Day 10 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     lines
     |> to_coord_map()
@@ -12,11 +12,11 @@ defmodule AdventOfCode2023.Day10 do
     |> div(2)
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     height = length(lines)
     width = lines |> hd() |> byte_size()
-    
+
     lines
     |> to_coord_map()
     |> loop_coords()
@@ -26,7 +26,7 @@ defmodule AdventOfCode2023.Day10 do
   # ===== Helper functions =====
   @type coord :: {x :: integer, y :: integer}
   @type coord_map :: %{coord => neighbors :: [coord], start: coord}
-  @spec to_coord_map([String.t]) :: coord_map
+  @spec to_coord_map([String.t()]) :: coord_map
   def to_coord_map(lines) do
     for {line, i} <- Enum.with_index(lines),
         {pipe, j} <- line |> String.to_charlist() |> Enum.with_index(),
@@ -48,6 +48,7 @@ defmodule AdventOfCode2023.Day10 do
   @spec loop_coords(coord_map) :: winding_map
   def loop_coords(coord_map) do
     start = {i, j} = coord_map.start
+
     [_end_pos = {i1, _j1}, init_pos = {i2, _j2}] =
       [{i + 1, j}, {i - 1, j}, {i, j + 1}, {i, j - 1}]
       |> Enum.filter(fn next -> start in Map.get(coord_map, next, []) end)

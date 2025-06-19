@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day09 do
   Day 9 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     lines
     |> Stream.map(&parse_line/1)
@@ -12,7 +12,7 @@ defmodule AdventOfCode2023.Day09 do
     |> Enum.sum()
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     lines
     |> Stream.map(&parse_line/1)
@@ -21,7 +21,7 @@ defmodule AdventOfCode2023.Day09 do
   end
 
   # ===== Helper functions =====
-  @spec parse_line(String.t) :: [integer]
+  @spec parse_line(String.t()) :: [integer]
   defp parse_line(line) do
     line |> String.split(" ", trim: true) |> Enum.map(&String.to_integer/1)
   end

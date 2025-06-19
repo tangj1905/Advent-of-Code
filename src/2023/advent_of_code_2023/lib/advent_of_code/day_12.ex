@@ -1,12 +1,13 @@
 defmodule AdventOfCode2023.Day12 do
   import Record
+
   @moduledoc """
   Day 12 of Advent of Code 2023.
   """
   defrecordp :state, springs: "", chunks: []
   @type dp_state :: record(:state, springs: [?. | ?? | ?#], chunks: [integer])
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     for line <- lines do
       [springs, chunks] = String.split(line)
@@ -15,12 +16,12 @@ defmodule AdventOfCode2023.Day12 do
     |> Enum.sum()
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     for line <- lines do
       [springs, chunks] = String.split(line)
       dup_springs = springs |> List.duplicate(5) |> Enum.join("?")
-      dup_chunks  = chunks  |> List.duplicate(5) |> Enum.join(",")
+      dup_chunks = chunks |> List.duplicate(5) |> Enum.join(",")
       dp(%{}, to_state(dup_springs, dup_chunks)) |> elem(0)
     end
     |> Enum.sum()
@@ -29,14 +30,12 @@ defmodule AdventOfCode2023.Day12 do
   # ===== Helper functions =====
   @type memo :: %{dp_state => integer}
   @spec dp(memo, dp_state) :: {integer, memo}
-  defp dp(memo, state) when is_map_key(memo, state), do:
-    {memo[state], memo}
+  defp dp(memo, state) when is_map_key(memo, state), do: {memo[state], memo}
 
   # Base conditions:
-  defp dp(memo, state = state(springs: [], chunks: [])), do:
-    {1, Map.put(memo, state, 1)}
-  defp dp(memo, state = state(springs: [], chunks: _chunks)), do:
-    {0, Map.put(memo, state, 0)}
+  defp dp(memo, state = state(springs: [], chunks: [])), do: {1, Map.put(memo, state, 1)}
+  defp dp(memo, state = state(springs: [], chunks: _chunks)), do: {0, Map.put(memo, state, 0)}
+
   defp dp(memo, state = state(springs: sprs, chunks: [])) do
     ways = if Enum.all?(sprs, &(&1 != ?#)), do: 1, else: 0
     {ways, Map.put(memo, state, ways)}
@@ -47,14 +46,20 @@ defmodule AdventOfCode2023.Day12 do
   # Case 2: if we encounter a defective spring, we must try to build the next chunk around it.
   # Case 3: otherwise, try both.
   defp dp(memo, state = state(springs: [spr | _])) do
-    {ways, memo_new} = case spr do
-      ?. -> skip_one(memo, state)
-      ?# -> accept_chunk(memo, state)
-      ?? ->
-        {ways_skip, memo_1} = skip_one(memo, state)
-        {ways_accept, memo_2} = accept_chunk(memo_1, state)
-        {ways_skip + ways_accept, memo_2}
-    end
+    {ways, memo_new} =
+      case spr do
+        ?. ->
+          skip_one(memo, state)
+
+        ?# ->
+          accept_chunk(memo, state)
+
+        ?? ->
+          {ways_skip, memo_1} = skip_one(memo, state)
+          {ways_accept, memo_2} = accept_chunk(memo_1, state)
+          {ways_skip + ways_accept, memo_2}
+      end
+
     {ways, Map.put(memo_new, state, ways)}
   end
 
@@ -74,7 +79,7 @@ defmodule AdventOfCode2023.Day12 do
     end
   end
 
-  @spec to_state(String.t, String.t) :: dp_state
+  @spec to_state(String.t(), String.t()) :: dp_state
   defp to_state(springs, chunks) do
     springs = String.to_charlist(springs)
     chunks = chunks |> String.split(",") |> Enum.map(&String.to_integer/1)

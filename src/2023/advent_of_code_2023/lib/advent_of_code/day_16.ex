@@ -3,7 +3,7 @@ defmodule AdventOfCode2023.Day16 do
   Day 16 of Advent of Code 2023.
   """
 
-  @spec part1([String.t]) :: integer
+  @spec part1([String.t()]) :: integer
   def part1(lines) do
     grid = to_grid(lines)
     init = {{0, 0}, {0, 1}}
@@ -11,14 +11,14 @@ defmodule AdventOfCode2023.Day16 do
     count_tiles(grid, init)
   end
 
-  @spec part2([String.t]) :: integer
+  @spec part2([String.t()]) :: integer
   def part2(lines) do
     grid = to_grid(lines)
     l = length(lines)
     w = lines |> hd() |> byte_size()
 
-    horiz = Enum.flat_map(0..l - 1, fn i -> [{{i, 0}, {0, 1}}, {{i, w - 1}, {0, -1}}] end)
-    verti = Enum.flat_map(0..w - 1, fn j -> [{{0, j}, {1, 0}}, {{l - 1, j}, {-1, 0}}] end)
+    horiz = Enum.flat_map(0..(l - 1), fn i -> [{{i, 0}, {0, 1}}, {{i, w - 1}, {0, -1}}] end)
+    verti = Enum.flat_map(0..(w - 1), fn j -> [{{0, j}, {1, 0}}, {{l - 1, j}, {-1, 0}}] end)
 
     (horiz ++ verti)
     |> Enum.map(&Task.async(fn -> count_tiles(grid, &1) end))
@@ -28,13 +28,14 @@ defmodule AdventOfCode2023.Day16 do
 
   # ===== Helper functions =====
   @type element :: ?. | ?/ | ?\\ | ?- | ?|
-  @type coord   :: {i :: integer, j :: integer}
-  @type grid    :: %{coord => element}
+  @type coord :: {i :: integer, j :: integer}
+  @type grid :: %{coord => element}
 
-  @spec to_grid([String.t]) :: grid
+  @spec to_grid([String.t()]) :: grid
   defp to_grid(lines) do
     for {row, i} <- Enum.with_index(lines),
-        {elt, j} <- row |> String.to_charlist() |> Enum.with_index(), into: %{} do
+        {elt, j} <- row |> String.to_charlist() |> Enum.with_index(),
+        into: %{} do
       {{i, j}, elt}
     end
   end
@@ -44,20 +45,19 @@ defmodule AdventOfCode2023.Day16 do
 
   @spec propagate(grid, beam) :: [beam]
   defp propagate(grid, {{i, j} = coord, {di, dj} = dir}) do
-    neighbors = case grid[coord] do
-      nil -> []
+    neighbors =
+      case grid[coord] do
+        nil -> []
+        # Reflecting:
+        ?/ -> [{{i - dj, j - di}, {-dj, -di}}]
+        ?\\ -> [{{i + dj, j + di}, {dj, di}}]
+        # Splitting:
+        ?| when di == 0 -> [{{i + 1, j}, {1, 0}}, {{i - 1, j}, {-1, 0}}]
+        ?- when dj == 0 -> [{{i, j + 1}, {0, 1}}, {{i, j - 1}, {0, -1}}]
+        # Continuing:
+        _ -> [{{i + di, j + dj}, dir}]
+      end
 
-      # Reflecting:
-      ?/  -> [{{i - dj, j - di}, {-dj, -di}}]
-      ?\\ -> [{{i + dj, j + di}, { dj,  di}}]
-
-      # Splitting:
-      ?| when di == 0 -> [{{i + 1, j}, {1, 0}}, {{i - 1, j}, {-1, 0}}]
-      ?- when dj == 0 -> [{{i, j + 1}, {0, 1}}, {{i, j - 1}, {0, -1}}]
-
-      # Continuing:
-      _ -> [{{i + di, j + dj}, dir}]
-    end
     Enum.filter(neighbors, fn {coord, _dir} -> is_map_key(grid, coord) end)
   end
 
@@ -72,6 +72,7 @@ defmodule AdventOfCode2023.Day16 do
 
   @spec bfs(frontier :: [beam], grid, visited :: MapSet.t(beam)) :: MapSet.t(beam)
   defp bfs([], _grid, vis), do: vis
+
   defp bfs(frontier, grid, vis) do
     next =
       frontier
